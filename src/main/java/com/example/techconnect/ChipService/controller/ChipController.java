@@ -15,19 +15,21 @@ public class ChipController {
 
     @Autowired
     ExchangeRateClient exchangeRateClient;
-    
+
     @GetMapping(value = "/chipValue")
-    public ResponseEntity<Integer> getCurrentChipValue(@RequestParam (name = "amountToBuy", required = true) int amountOfMoney){
+    public ResponseEntity<Double> getCurrentChipValue(
+            @RequestParam(name = "amountToBuy", required = false) Integer amountOfMoney){
 
         ExchangeRate rates = exchangeRateClient.getExchangeRate();
         double rate = rates.getRates().get("GBP");
-        if (amountOfMoney <= 150){
-            rate = (amountOfMoney * rate) / 100;
-        } else {
-            rate = (150 * rate) / 100;
+        if (amountOfMoney != null) {
+            if (amountOfMoney <= 150) {
+                rate = (amountOfMoney * rate) / 100;
+            } else {
+                rate = (150 * rate) / 100;
+            }
         }
-        int chipExchange = (int) Math.ceil(rate * 5);
+        double chipExchange = rate * 5;
         return new ResponseEntity<>(chipExchange, HttpStatus.OK);
-
     }
 }
