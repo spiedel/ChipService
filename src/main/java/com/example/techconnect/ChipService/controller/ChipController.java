@@ -39,7 +39,7 @@ public class ChipController {
             } pastExchanges.setTransactionType("buy");
         }
 
-        double chipExchange = rate * 5;
+        double chipExchange = Math.round(rate * 5 * 100) / 100;
         if(chipExchange <1){
             chipExchange = 1; }
 
